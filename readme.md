@@ -1,88 +1,246 @@
-# Software Engineer Challenge
-## Overview
-Welcome to the Software Engineer Application Challenge. In this challenge, you will demonstrate your skills in backend development, API design, testing, and cloud deployment.
+# User Management API
 
-## Problem
-You will develop a RESTful API for user management with complete CRUD (Create, Read, Update, Delete) operations. The application should handle user data with the following attributes:
+## Descripción General
 
-| Field       | Description                              |
-|-------------|------------------------------------------|
-| id          | Unique identifier for each user          |
-| username    | User's unique username                   |
-| email       | User's email address                     |
-| first_name  | User's first name                        |
-| last_name   | User's last name                         |
-| role        | User role (admin, user, guest)           |
-| created_at  | Timestamp when the user was created      |
-| updated_at  | Timestamp when the user was last updated |
-| active      | Boolean indicating if the user is active |
+User Management API es un servicio backend RESTful desarrollado con FastAPI y PostgreSQL siguiendo buenas prácticas de arquitectura enterprise, separación de responsabilidades y principios inspirados en Clean Architecture.
 
-## Challenge
+Este proyecto fue desarrollado como parte de un desafío técnico para una posición Full Stack Senior y demuestra:
 
-### Context:
-In today's digital landscape, effective user management is a foundational component of virtually all software applications. This challenge simulates a real-world scenario where a user management API is needed for a growing application.
+* Desarrollo de APIs REST
+* Operaciones CRUD
+* Arquitectura en capas
+* Repository Pattern y Service Layer
+* Contenerización con Docker
+* Testing automatizado
+* Logging y middleware
+* Estrategia GitFlow
+* Separación de ambientes
+* Buenas prácticas de seguridad
 
-As a Software Engineer, you've been tasked with building a robust and scalable user management API that will serve as the backbone for user-related operations. The API should provide a clean interface for creating, retrieving, updating, and deleting user profiles while ensuring data integrity and following industry best practices.
+---
 
-Beyond just functionality, we're interested in seeing your approach to software architecture, code organization, testing strategies, and cloud deployment skills. This challenge is designed to showcase not only your technical abilities but also your understanding of production-ready software development.
+## Arquitectura
 
+El proyecto sigue una arquitectura modular basada en capas.
 
-### API Development
-Develop an API with FastAPI:
-
-- Implement all CRUD endpoints for user management
-- Add proper input validation for all requests
-- Document all endpoints using OpenAPI/Swagger
-- Implement proper error handling for edge cases
-- The API should connect to a database of your choice (SQL or NoSQL)
-- Write detailed API tests using pytest
-- Deploy your API to Google Cloud Platform (GCP)
-
-Requirements:
-- You must use FastAPI as the framework
-- Provide examples of API calls for each endpoint in your documentation
-- Write clean, maintainable code with proper comments
-- The API should follow REST best practices
-- Include at least basic logging functionality
-- Create a `cloudbuild.yaml` file for Google Cloud Build that includes:
-  - Building the Docker image
-  - Running tests
-  - Deploying the application to Google Cloud Run or App Engine
-
-### Evaluation Criteria
-Your submission will be evaluated based on the following criteria:
-
-- **Code Quality**: Readability, organization, and adherence to Python best practices
-- **API Design**: Proper implementation of RESTful principles and resource modeling
-- **Data Handling**: Effective data validation, error handling, and database integration
-- **Testing**: Comprehensive test coverage and proper test organization
-- **Documentation**: Clear and complete API documentation
-- **Cloud Deployment**: Successful deployment to GCP and proper configuration
-- **CI/CD Implementation**: Quality and completeness of the `cloudbuild.yaml` file
-- **Overall Functionality**: The API works as expected for all CRUD operations
-
-### Submission Instructions
-To submit your challenge, you must do a POST request to: https://advana-challenge-check-api-cr-k4hdbggvoq-uc.a.run.app/software-engineer
-
-This is an example of the body you must send:
-
-```json
-{
-  "name": "Juan Perez",
-  "mail": "juan.perez@example.com",
-  "github_url": "https://github.com/juanperez/se-challenge.git",
-  "api_url": "https://juan-perez.api"
-}
+```text
+app/
+├── api/            # Rutas y controladores
+├── core/           # Configuración, logging y middleware
+├── db/             # Configuración de base de datos
+├── models/         # Modelos SQLAlchemy
+├── repositories/   # Acceso a datos
+├── schemas/        # DTOs y validaciones Pydantic
+├── services/       # Reglas de negocio
+└── main.py         # Punto de entrada aplicación
 ```
 
-PLEASE, SEND THE REQUEST ONLY ONCE.
-If your request was successful, you will receive this message:
+---
 
-```
-jsonCopiar{
-  "status": "OK",
-  "detail": "your request was received"
-}
+## Stack Tecnológico
+
+| Tecnología     | Propósito                 |
+| -------------- | ------------------------- |
+| FastAPI        | Framework API REST        |
+| PostgreSQL     | Base de datos relacional  |
+| SQLAlchemy     | ORM                       |
+| Pydantic       | Validación de datos       |
+| Docker         | Contenerización           |
+| Docker Compose | Orquestación contenedores |
+| Pytest         | Testing automatizado      |
+| Uvicorn        | Servidor ASGI             |
+
+---
+
+## Funcionalidades
+
+### CRUD de Usuarios
+
+* Crear usuario
+* Obtener todos los usuarios
+* Obtener usuario por ID
+* Actualizar usuario
+* Eliminar usuario
+
+### Validaciones
+
+* Validación de email único
+* Validación de username único
+* Validación de payloads mediante Pydantic
+
+### Logging
+
+* Middleware de logging HTTP
+* Logs de aplicación
+* Medición de tiempos de respuesta
+
+### Testing
+
+* Tests unitarios e integración
+* Cobertura automatizada
+
+---
+
+## Endpoints Disponibles
+
+| Método | Endpoint         | Descripción            |
+| ------ | ---------------- | ---------------------- |
+| GET    | /health          | Health check           |
+| GET    | /users           | Obtener usuarios       |
+| POST   | /users           | Crear usuario          |
+| GET    | /users/{user_id} | Obtener usuario por ID |
+| PATCH  | /users/{user_id} | Actualizar usuario     |
+| DELETE | /users/{user_id} | Eliminar usuario       |
+
+---
+
+## Configuración Local
+
+### Requisitos
+
+* Python 3.11+
+* Docker Desktop
+* PostgreSQL
+* Git
+
+---
+
+## Variables de Entorno
+
+Crear un archivo `.env`:
+
+```env
+DATABASE_URL=postgresql+psycopg2://postgres:admin123@localhost:5432/user_management_db
 ```
 
-NOTE: We recommend sending the challenge even if you didn't manage to finish all the parts.
+---
+
+## Ejecución Local
+
+### Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+### Levantar API
+
+```bash
+uvicorn app.main:app --reload
+```
+
+### Documentación Swagger
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+## Docker
+
+### Construir contenedores
+
+```bash
+docker compose build
+```
+
+### Levantar infraestructura
+
+```bash
+docker compose up
+```
+
+### Detener infraestructura
+
+```bash
+docker compose down
+```
+
+---
+
+## Testing Automatizado
+
+### Ejecutar tests
+
+```bash
+pytest
+```
+
+### Ejecutar tests con coverage
+
+```bash
+pytest --cov=app
+```
+
+---
+
+## Estrategia GitFlow
+
+El repositorio implementa una estrategia GitFlow simplificada.
+
+### Ramas principales
+
+| Rama    | Propósito              |
+| ------- | ---------------------- |
+| main    | Producción             |
+| quality | Validación QA          |
+| develop | Integración desarrollo |
+
+### Flujo de trabajo
+
+```text
+feature/* → develop → quality → main
+```
+
+### Reglas
+
+* No se permiten pushes directos a main
+* No se permiten pushes directos a quality
+* Pull Requests obligatorios
+* Validación previa antes de merge
+* Protección de ramas críticas
+
+---
+
+## Consideraciones de Seguridad
+
+* Variables de entorno para información sensible
+* Protección base contra SQL Injection mediante ORM
+* Validación de requests con Pydantic
+* Logging estructurado
+* Separación de capas
+* Acceso a base de datos mediante repositories
+
+---
+
+## Mejoras Futuras
+
+* JWT Authentication
+* Role Based Authorization
+* CI/CD completo
+* Kubernetes/OpenShift
+* Rate Limiting
+* OpenTelemetry
+* Alembic migrations
+* Redis caching
+* Async SQLAlchemy
+
+---
+
+## Autor
+
+Carlos Javier López Aguayo
+
+GitHub:
+[https://github.com/RangerSheff](https://github.com/RangerSheff)
+
+---
+
+## Referencia Challenge
+
+El enunciado original del challenge será almacenado separadamente en:
+
+```text
+CHALLENGE.md
+```
