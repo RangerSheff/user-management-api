@@ -1,0 +1,7 @@
+APP_ENV=dev
+LOG_LEVEL=INFO
+
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your_secure_docker_password
+POSTGRES_PORT=5432
+POSTGRES_DB=user_management_db
