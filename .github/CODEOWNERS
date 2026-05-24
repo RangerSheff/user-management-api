@@ -1,0 +1,40 @@
+# Global ownership
+* @RangerSheff
+
+# Application source code
+/app/ @RangerSheff
+
+# API layer
+/app/api/ @RangerSheff
+/app/schemas/ @RangerSheff
+
+# Business logic
+/app/services/ @RangerSheff
+
+# Data layer
+/app/db/ @RangerSheff
+/app/models/ @RangerSheff
+/app/repositories/ @RangerSheff
+
+# Core infrastructure
+/app/core/ @RangerSheff
+
+# Testing
+/tests/ @RangerSheff
+
+# CI/CD and automation
+/.github/ @RangerSheff
+/scripts/ @RangerSheff
+
+# Infrastructure
+Dockerfile @RangerSheff
+docker-compose.yml @RangerSheff
+cloudbuild.yaml @RangerSheff
+
+# Dependency management
+requirements.txt @RangerSheff
+pyproject.toml @RangerSheff
+
+# Documentation
+README.md @RangerSheff
+CHALLENGE.md @RangerSheff
