@@ -1,11 +1,23 @@
+# Framework
 fastapi
 uvicorn[standard]
+
+# Database
 sqlalchemy
 psycopg2-binary
+
+# Validation and settings
 pydantic
 pydantic-settings
 email-validator
 python-dotenv
+
+# Testing
 pytest
-httpx
 pytest-cov
+httpx
+
+# Code quality and security
+ruff
+bandit
+pip-audit
