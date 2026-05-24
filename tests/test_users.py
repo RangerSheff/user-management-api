@@ -8,10 +8,10 @@ client = TestClient(app)
 
 def test_create_user_success():
     payload = {
-        "username": "testuser01",
-        "email": "testuser01@example.com",
+        "username": "userTestDev",
+        "email": "userTestDev@example.com",
         "first_name": "Test",
-        "last_name": "User",
+        "last_name": "Dev",
         "role": "user"
     }
 
@@ -34,22 +34,22 @@ def test_create_user_success():
 
 def test_create_user_duplicate_email():
     payload = {
-        "username": "testuser02",
-        "email": "duplicate@example.com",
+        "username": "userTestQA",
+        "email": "userTestQA@example.com",
         "first_name": "Test",
-        "last_name": "User",
+        "last_name": "QA",
         "role": "user"
     }
 
     first_response = client.post("/users", json=payload)
 
-    assert first_response.status_code in [201, 409]
+    assert first_response.status_code == 201
 
     duplicate_payload = {
-        "username": "testuser03",
-        "email": "duplicate@example.com",
+        "username": "userTestQADuplicate",
+        "email": "userTestQA@example.com",
         "first_name": "Test",
-        "last_name": "User",
+        "last_name": "QA",
         "role": "admin"
     }
 
@@ -75,23 +75,17 @@ def test_get_user_by_id_not_found():
 
 def test_update_user_success():
     create_payload = {
-        "username": "updateuser01",
-        "email": "updateuser01@example.com",
+        "username": "userTestUpdate",
+        "email": "userTestUpdate@example.com",
         "first_name": "Before",
         "last_name": "Update",
         "role": "user"
     }
 
     create_response = client.post("/users", json=create_payload)
-    assert create_response.status_code in [201, 409]
+    assert create_response.status_code == 201
 
-    users_response = client.get("/users")
-    users = users_response.json()
-
-    user = next(
-        item for item in users
-        if item["email"] == create_payload["email"]
-    )
+    user = create_response.json()
 
     update_payload = {
         "first_name": "After",
@@ -113,25 +107,22 @@ def test_update_user_success():
 
 def test_delete_user_success():
     create_payload = {
-        "username": "deleteuser01",
-        "email": "deleteuser01@example.com",
+        "username": "userTestDelete",
+        "email": "userTestDelete@example.com",
         "first_name": "Delete",
         "last_name": "User",
         "role": "guest"
     }
 
     create_response = client.post("/users", json=create_payload)
+    assert create_response.status_code == 201
 
-    assert create_response.status_code in [201, 409]
-
-    users_response = client.get("/users")
-    users = users_response.json()
-
-    user = next(
-        item for item in users
-        if item["email"] == create_payload["email"]
-    )
+    user = create_response.json()
 
     response = client.delete(f"/users/{user['id']}")
 
     assert response.status_code == 204
+
+    get_response = client.get(f"/users/{user['id']}")
+
+    assert get_response.status_code == 404

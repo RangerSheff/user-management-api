@@ -107,10 +107,23 @@ app/
 
 ## Variables de Entorno
 
-Crear un archivo `.env`:
+Crear un archivo `.env` basado en `.env.example`:
+
+```bash
+cp .env.example .env
+```
+
+Ejemplo:
 
 ```env
-DATABASE_URL=postgresql+psycopg2://postgres:admin123@localhost:5432/user_management_db
+APP_ENV=dev
+LOG_LEVEL=INFO
+
+POSTGRES_USER=your_postgres_user
+POSTGRES_PASSWORD=your_secure_password
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=user_management_db
 ```
 
 ---
