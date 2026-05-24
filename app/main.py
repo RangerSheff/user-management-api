@@ -6,7 +6,8 @@ from app.core.logging import get_logger
 from app.core.middleware import request_logging_middleware
 from app.db.database import Base
 from app.db.database import engine
-from app.models.user_model import User
+from app.models.user_model import User # noqa: F401
+# Required for SQLAlchemy metadata registration
 
 configure_logging()
 logger = get_logger(__name__)
