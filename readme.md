@@ -1,5 +1,15 @@
 # User Management API
 
+![CI](https://github.com/RangerSheff/user-management-api/actions/workflows/ci.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.13-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-REST_API-green)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
+![Docker](https://img.shields.io/badge/Docker-Containerization-2496ED)
+![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
+
+API REST orientada a empresas, desarrollada con FastAPI, PostgreSQL, Docker y prácticas DevSecOps.
+
 ## Descripción General
 
 User Management API es un servicio backend RESTful desarrollado con FastAPI y PostgreSQL siguiendo buenas prácticas de arquitectura enterprise, separación de responsabilidades y principios inspirados en Clean Architecture.
@@ -7,9 +17,10 @@ User Management API es un servicio backend RESTful desarrollado con FastAPI y Po
 Este proyecto fue desarrollado como parte de un desafío técnico para una posición Full Stack Senior y demuestra:
 
 * Desarrollo de APIs REST
-* Operaciones CRUD
+* Operaciones CRUD completas
 * Arquitectura en capas
 * Repository Pattern y Service Layer
+* DTOs y validaciones con Pydantic
 * Contenerización con Docker
 * Testing automatizado
 * Logging y middleware
@@ -18,12 +29,29 @@ Este proyecto fue desarrollado como parte de un desafío técnico para una posic
 * Buenas prácticas de seguridad
 * Integración CI/CD
 * Validaciones automáticas de calidad y seguridad
+* Preparación para despliegue en Google Cloud Run
 
 ---
 
 ## Arquitectura
 
 El proyecto sigue una arquitectura modular basada en capas.
+
+```text
+Client
+  ↓
+FastAPI Router
+  ↓
+Service Layer
+  ↓
+Repository Layer
+  ↓
+SQLAlchemy ORM
+  ↓
+PostgreSQL
+```
+
+### Estructura principal
 
 ```text
 app/
@@ -36,33 +64,30 @@ app/
 ├── services/       # Reglas de negocio
 └── main.py         # Punto de entrada aplicación
 
-scripts/
-└── validate.sh     # Script local de validación
-
-.github/
-├── workflows/
-│   └── ci.yml      # Pipeline CI/CD
-└── dependabot.yml  # Monitoreo dependencias
+tests/              # Tests unitarios e integración
+scripts/            # Automatización local
+.github/            # Workflows, Dependabot y governance
 ```
 
 ---
 
 ## Stack Tecnológico
 
-| Tecnología     | Propósito                 |
-| -------------- | ------------------------- |
-| FastAPI        | Framework API REST        |
-| PostgreSQL     | Base de datos relacional  |
-| SQLAlchemy     | ORM                       |
-| Pydantic       | Validación de datos       |
-| Docker         | Contenerización           |
-| Docker Compose | Orquestación contenedores |
-| Pytest         | Testing automatizado      |
-| Ruff           | Linting y calidad código  |
-| Bandit         | Security scanning         |
-| pip-audit      | Auditoría dependencias    |
-| GitHub Actions | Integración continua      |
-| Uvicorn        | Servidor ASGI             |
+| Tecnología     | Propósito                  |
+| -------------- | -------------------------- |
+| FastAPI        | Framework API REST         |
+| PostgreSQL     | Base de datos relacional   |
+| SQLAlchemy     | ORM                        |
+| Pydantic       | Validación de datos        |
+| Docker         | Contenerización            |
+| Docker Compose | Orquestación contenedores  |
+| Pytest         | Testing automatizado       |
+| Ruff           | Linting y calidad código   |
+| Bandit         | Security scanning          |
+| pip-audit      | Auditoría dependencias     |
+| GitHub Actions | Integración continua       |
+| Dependabot     | Monitoreo de dependencias  |
+| Uvicorn        | Servidor ASGI              |
 
 ---
 
@@ -81,19 +106,25 @@ scripts/
 * Validación de email único
 * Validación de username único
 * Validación de payloads mediante Pydantic
+* Validación de roles permitidos
+* Control de errores 404 y 409
 
-### Logging
+### Seguridad
+
+* Variables de entorno para información sensible
+* Eliminación de credenciales hardcodeadas
+* Protección base contra SQL Injection mediante ORM
+* Limpieza segura de datos de testing
+* Bloqueo de ejecución de tests en ambiente productivo
+* Security scanning con Bandit
+* Auditoría de dependencias con pip-audit
+
+### Observabilidad
 
 * Middleware de logging HTTP
-* Logs de aplicación
+* Logs estructurados
 * Medición de tiempos de respuesta
-
-### Testing
-
-* Tests unitarios e integración
-* Cobertura automatizada
-* Limpieza automática de datos de testing
-* Protección contra ejecución en producción
+* Health check básico
 
 ---
 
@@ -101,12 +132,177 @@ scripts/
 
 | Método | Endpoint         | Descripción            |
 | ------ | ---------------- | ---------------------- |
-| GET    | /health          | Health check           |
-| GET    | /users           | Obtener usuarios       |
-| POST   | /users           | Crear usuario          |
-| GET    | /users/{user_id} | Obtener usuario por ID |
-| PATCH  | /users/{user_id} | Actualizar usuario     |
-| DELETE | /users/{user_id} | Eliminar usuario       |
+| GET    | `/health`        | Health check           |
+| GET    | `/users`         | Obtener usuarios       |
+| POST   | `/users`         | Crear usuario          |
+| GET    | `/users/{user_id}` | Obtener usuario por ID |
+| PATCH  | `/users/{user_id}` | Actualizar usuario     |
+| DELETE | `/users/{user_id}` | Eliminar usuario       |
+
+---
+
+## Modelo de Usuario
+
+```json
+{
+  "id": "uuid",
+  "username": "string",
+  "email": "string",
+  "first_name": "string",
+  "last_name": "string",
+  "role": "admin | user | guest",
+  "active": true,
+  "created_at": "datetime",
+  "updated_at": "datetime"
+}
+```
+
+---
+
+## Ejemplos de Consumo API
+
+> Base URL local: `http://127.0.0.1:8000`
+
+### Health Check
+
+```bash
+curl -X GET http://127.0.0.1:8000/health
+```
+
+Respuesta esperada:
+
+```json
+{
+  "status": "OK"
+}
+```
+
+---
+
+### Crear Usuario
+
+```bash
+curl -X POST http://127.0.0.1:8000/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "userTestDev",
+    "email": "userTestDev@example.com",
+    "first_name": "Test",
+    "last_name": "Developer",
+    "role": "user"
+  }'
+```
+
+Respuesta esperada:
+
+```json
+{
+  "id": "generated-uuid",
+  "username": "userTestDev",
+  "email": "userTestDev@example.com",
+  "first_name": "Test",
+  "last_name": "Developer",
+  "role": "user",
+  "active": true,
+  "created_at": "2026-01-01T00:00:00",
+  "updated_at": "2026-01-01T00:00:00"
+}
+```
+
+---
+
+### Obtener Usuarios
+
+```bash
+curl -X GET http://127.0.0.1:8000/users
+```
+
+Respuesta esperada:
+
+```json
+[
+  {
+    "id": "generated-uuid",
+    "username": "userTestDev",
+    "email": "userTestDev@example.com",
+    "first_name": "Test",
+    "last_name": "Developer",
+    "role": "user",
+    "active": true,
+    "created_at": "2026-01-01T00:00:00",
+    "updated_at": "2026-01-01T00:00:00"
+  }
+]
+```
+
+---
+
+### Obtener Usuario por ID
+
+```bash
+curl -X GET http://127.0.0.1:8000/users/{user_id}
+```
+
+Ejemplo:
+
+```bash
+curl -X GET http://127.0.0.1:8000/users/00000000-0000-0000-0000-000000000000
+```
+
+---
+
+### Actualizar Usuario
+
+```bash
+curl -X PATCH http://127.0.0.1:8000/users/{user_id} \
+  -H "Content-Type: application/json" \
+  -d '{
+    "first_name": "Updated",
+    "role": "admin"
+  }'
+```
+
+---
+
+### Eliminar Usuario
+
+```bash
+curl -X DELETE http://127.0.0.1:8000/users/{user_id}
+```
+
+Respuesta esperada:
+
+```text
+204 No Content
+```
+
+---
+
+### Casos de error esperados
+
+#### Usuario no encontrado
+
+```json
+{
+  "detail": "User not found"
+}
+```
+
+#### Email duplicado
+
+```json
+{
+  "detail": "Email already exists"
+}
+```
+
+#### Username duplicado
+
+```json
+{
+  "detail": "Username already exists"
+}
+```
 
 ---
 
@@ -141,6 +337,8 @@ POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_DB=user_management_db
 ```
+
+> No se deben versionar credenciales reales. El archivo `.env` debe permanecer fuera del repositorio.
 
 ---
 
@@ -180,10 +378,22 @@ docker compose build
 docker compose up
 ```
 
+### Levantar reconstruyendo la imagen
+
+```bash
+docker compose up --build
+```
+
 ### Detener infraestructura
 
 ```bash
 docker compose down
+```
+
+### Detener y limpiar volumen de base de datos
+
+```bash
+docker compose down -v
 ```
 
 ---
@@ -200,6 +410,12 @@ pytest
 
 ```bash
 pytest --cov=app
+```
+
+### Ejecutar tests mostrando líneas faltantes
+
+```bash
+pytest --cov=app --cov-report=term-missing
 ```
 
 ---
@@ -247,6 +463,64 @@ Cada Pull Request ejecuta:
 
 ---
 
+## Despliegue en Google Cloud Platform (GCP)
+
+El proyecto incluye un archivo `cloudbuild.yaml` preparado para integraciones CI/CD y despliegue automatizado en Google Cloud Run.
+
+### Objetivos del pipeline
+
+El pipeline automatiza:
+
+* Instalación de dependencias
+* Ejecución de tests automatizados
+* Construcción de imagen Docker
+* Push de imagen a Google Container Registry
+* Despliegue automatizado a Cloud Run
+
+### Variables reemplazables
+
+| Variable | Descripción |
+| -------- | ----------- |
+| PROJECT_ID | ID del proyecto GCP |
+| _REGION | Región Cloud Run |
+| _SERVICE_NAME | Nombre servicio |
+| _IMAGE_NAME | Nombre imagen Docker |
+
+### Región por defecto
+
+El template utiliza:
+
+```text
+southamerica-west1
+```
+
+Debido a:
+
+* Cercanía geográfica con Chile
+* Menor latencia regional
+* Compatibilidad con arquitecturas enterprise LATAM
+
+### Ejecución Cloud Build
+
+```bash
+gcloud builds submit \
+  --config cloudbuild.yaml \
+  --substitutions=_REGION=southamerica-west1,_SERVICE_NAME=user-management-api,_IMAGE_NAME=user-management-api
+```
+
+### Consideraciones de Producción
+
+Para ambientes reales se recomienda:
+
+* Google Secret Manager
+* Cloud SQL PostgreSQL
+* IAM mínimo privilegio
+* Variables sensibles externas
+* Logging y métricas centralizadas
+* Observabilidad avanzada
+
+---
+
 ## Estrategia GitFlow
 
 El repositorio implementa una estrategia GitFlow simplificada.
@@ -272,6 +546,19 @@ feature/* → develop → quality → main
 * Pull Requests obligatorios
 * Validación previa antes de merge
 * Protección de ramas críticas
+* Ramas feature eliminadas después del merge
+
+---
+
+## Repository Governance
+
+El repositorio incluye:
+
+* CODEOWNERS
+* Branch protection rules
+* Pull Request validation flow
+* Dependabot dependency monitoring
+* CI quality gates
 
 ---
 
@@ -291,6 +578,23 @@ feature/* → develop → quality → main
 
 ---
 
+## Referencia de Entrega Challenge
+
+Ejemplo estructura solicitada para entrega final:
+
+```json
+{
+  "name": "Carlos Javier López Aguayo",
+  "mail": "carloslopezaguayo@gmail.com",
+  "github_url": "https://github.com/RangerSheff/user-management-api",
+  "api_url": "https://user-management-api-xxxxx-southamerica-west1.a.run.app"
+}
+```
+
+> `api_url` corresponde a una URL generada automáticamente por Google Cloud Run durante despliegues reales.
+
+---
+
 ## Mejoras Futuras
 
 * JWT Authentication
@@ -304,6 +608,8 @@ feature/* → develop → quality → main
 * Async SQLAlchemy
 * Observabilidad avanzada
 * SonarQube integration
+* Global exception handler
+* Healthcheck con validación de base de datos
 
 ---
 
