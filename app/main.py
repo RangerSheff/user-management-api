@@ -1,12 +1,11 @@
 from fastapi import FastAPI
 
 from app.api.user_router import router as user_router
-from app.core.logging import configure_logging
-from app.core.logging import get_logger
+from app.core.logging import configure_logging, get_logger
 from app.core.middleware import request_logging_middleware
-from app.db.database import Base
-from app.db.database import engine
-from app.models.user_model import User # noqa: F401
+from app.db.database import Base, engine
+from app.models.user_model import User  # noqa: F401
+
 # Required for SQLAlchemy metadata registration
 
 configure_logging()

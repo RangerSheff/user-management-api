@@ -1,15 +1,11 @@
 from typing import List
 
-from fastapi import APIRouter
-from fastapi import Depends
-from fastapi import status
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
 from app.repositories.user_repository import UserRepository
-from app.schemas.user_schema import UserCreate
-from app.schemas.user_schema import UserResponse
-from app.schemas.user_schema import UserUpdate
+from app.schemas.user_schema import UserCreate, UserResponse, UserUpdate
 from app.services.user_service import UserService
 
 router = APIRouter(
