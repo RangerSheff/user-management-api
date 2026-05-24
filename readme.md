@@ -16,6 +16,8 @@ Este proyecto fue desarrollado como parte de un desafío técnico para una posic
 * Estrategia GitFlow
 * Separación de ambientes
 * Buenas prácticas de seguridad
+* Integración CI/CD
+* Validaciones automáticas de calidad y seguridad
 
 ---
 
@@ -33,6 +35,14 @@ app/
 ├── schemas/        # DTOs y validaciones Pydantic
 ├── services/       # Reglas de negocio
 └── main.py         # Punto de entrada aplicación
+
+scripts/
+└── validate.sh     # Script local de validación
+
+.github/
+├── workflows/
+│   └── ci.yml      # Pipeline CI/CD
+└── dependabot.yml  # Monitoreo dependencias
 ```
 
 ---
@@ -48,6 +58,10 @@ app/
 | Docker         | Contenerización           |
 | Docker Compose | Orquestación contenedores |
 | Pytest         | Testing automatizado      |
+| Ruff           | Linting y calidad código  |
+| Bandit         | Security scanning         |
+| pip-audit      | Auditoría dependencias    |
+| GitHub Actions | Integración continua      |
 | Uvicorn        | Servidor ASGI             |
 
 ---
@@ -78,6 +92,8 @@ app/
 
 * Tests unitarios e integración
 * Cobertura automatizada
+* Limpieza automática de datos de testing
+* Protección contra ejecución en producción
 
 ---
 
@@ -188,6 +204,49 @@ pytest --cov=app
 
 ---
 
+## Validaciones Locales
+
+Antes de crear un Pull Request se recomienda ejecutar:
+
+```bash
+./scripts/validate.sh
+```
+
+Este script ejecuta automáticamente:
+
+* Ruff
+* Bandit
+* pip-audit
+* Pytest con coverage
+
+---
+
+## Integración Continua (CI/CD)
+
+El proyecto incluye un pipeline automatizado mediante GitHub Actions.
+
+### Validaciones automáticas
+
+Cada Pull Request ejecuta:
+
+* Linting de código
+* Security scanning
+* Auditoría de dependencias
+* Tests automatizados
+* Validación de coverage
+
+### Herramientas utilizadas
+
+| Herramienta | Propósito                    |
+| ----------- | ---------------------------- |
+| Ruff        | Calidad y estilo código      |
+| Bandit      | Seguridad estática Python    |
+| pip-audit   | Vulnerabilidades paquetes    |
+| Pytest      | Validación funcional         |
+| Dependabot  | Actualización dependencias   |
+
+---
+
 ## Estrategia GitFlow
 
 El repositorio implementa una estrategia GitFlow simplificada.
@@ -219,11 +278,16 @@ feature/* → develop → quality → main
 ## Consideraciones de Seguridad
 
 * Variables de entorno para información sensible
+* Eliminación de credenciales hardcodeadas
 * Protección base contra SQL Injection mediante ORM
 * Validación de requests con Pydantic
 * Logging estructurado
 * Separación de capas
 * Acceso a base de datos mediante repositories
+* Security scanning automatizado
+* Auditoría de dependencias
+* Limpieza automática de datos de testing
+* Bloqueo de ejecución de tests en producción
 
 ---
 
@@ -231,13 +295,15 @@ feature/* → develop → quality → main
 
 * JWT Authentication
 * Role Based Authorization
-* CI/CD completo
+* Vault / Secret Manager
 * Kubernetes/OpenShift
 * Rate Limiting
 * OpenTelemetry
 * Alembic migrations
 * Redis caching
 * Async SQLAlchemy
+* Observabilidad avanzada
+* SonarQube integration
 
 ---
 
@@ -246,13 +312,13 @@ feature/* → develop → quality → main
 Carlos Javier López Aguayo
 
 GitHub:
-[https://github.com/RangerSheff](https://github.com/RangerSheff)
+https://github.com/RangerSheff
 
 ---
 
 ## Referencia Challenge
 
-El enunciado original del challenge será almacenado separadamente en:
+El enunciado original del challenge se encuentra almacenado separadamente en:
 
 ```text
 CHALLENGE.md
