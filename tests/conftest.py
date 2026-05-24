@@ -4,7 +4,6 @@ from app.core.config import settings
 from app.db.database import SessionLocal
 from app.models.user_model import User
 
-
 TEST_USERNAME_PREFIX = "userTest"
 
 
