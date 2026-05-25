@@ -11,9 +11,9 @@ def delete_test_users_only():
     db = SessionLocal()
 
     try:
-        db.query(User).filter(
-            User.username.like(f"{TEST_USERNAME_PREFIX}%")
-        ).delete(synchronize_session=False)
+        db.query(User).filter(User.username.like(f"{TEST_USERNAME_PREFIX}%")).delete(
+            synchronize_session=False
+        )
 
         db.commit()
     finally:
@@ -23,9 +23,7 @@ def delete_test_users_only():
 @pytest.fixture(autouse=True)
 def clean_test_users():
     if settings.APP_ENV == "prod":
-        raise RuntimeError(
-            "Tests cannot run in production environment."
-        )
+        raise RuntimeError("Tests cannot run in production environment.")
 
     delete_test_users_only()
 

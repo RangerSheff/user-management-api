@@ -60,7 +60,7 @@ def test_create_user_success():
         email="userTestServiceCreate@example.com",
         first_name="Test",
         last_name="Service",
-        role="user"
+        role="user",
     )
 
     response = service.create_user(payload)
@@ -80,7 +80,7 @@ def test_create_user_duplicate_email():
         email="userTestService@example.com",
         first_name="Test",
         last_name="Service",
-        role="user"
+        role="user",
     )
 
     with pytest.raises(HTTPException) as exc:
@@ -102,7 +102,7 @@ def test_create_user_duplicate_username():
         email="userTestService@example.com",
         first_name="Test",
         last_name="Service",
-        role="user"
+        role="user",
     )
 
     with pytest.raises(HTTPException) as exc:
@@ -122,10 +122,7 @@ def test_update_user_success():
 
     service = UserService(repository)
 
-    payload = UserUpdate(
-        first_name="Updated",
-        role="admin"
-    )
+    payload = UserUpdate(first_name="Updated", role="admin")
 
     response = service.update_user("user-id", payload)
 
@@ -133,22 +130,21 @@ def test_update_user_success():
     repository.get_by_id.assert_called_once_with("user-id")
     repository.update.assert_called_once_with(existing_user, payload)
 
+
 def test_update_user_not_found():
     repository = Mock()
     repository.get_by_id.return_value = None
 
     service = UserService(repository)
 
-    payload = UserUpdate(
-        first_name="After",
-        role="admin"
-    )
+    payload = UserUpdate(first_name="After", role="admin")
 
     with pytest.raises(HTTPException) as exc:
         service.update_user("non-existing-id", payload)
 
     assert exc.value.status_code == 404
     assert exc.value.detail == "User not found"
+
 
 def test_update_user_duplicate_email():
     existing_user = Mock()
@@ -159,15 +155,14 @@ def test_update_user_duplicate_email():
 
     service = UserService(repository)
 
-    payload = UserUpdate(
-        email="duplicated@example.com"
-    )
+    payload = UserUpdate(email="duplicated@example.com")
 
     with pytest.raises(HTTPException) as exc:
         service.update_user("user-id", payload)
 
     assert exc.value.status_code == 409
     assert exc.value.detail == "Email already exists"
+
 
 def test_delete_user_success():
     existing_user = Mock()
@@ -196,6 +191,7 @@ def test_delete_user_not_found():
     assert exc.value.status_code == 404
     assert exc.value.detail == "User not found"
 
+
 def test_update_user_duplicate_username():
     existing_user = Mock()
 
@@ -206,9 +202,7 @@ def test_update_user_duplicate_username():
 
     service = UserService(repository)
 
-    payload = UserUpdate(
-        username="duplicatedUsername"
-    )
+    payload = UserUpdate(username="duplicatedUsername")
 
     with pytest.raises(HTTPException) as exc:
         service.update_user("user-id", payload)
