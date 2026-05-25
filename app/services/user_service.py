@@ -16,8 +16,7 @@ class UserService:
 
         if not user:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )
 
         return user
@@ -25,14 +24,12 @@ class UserService:
     def create_user(self, user_data: UserCreate):
         if self.repository.get_by_email(user_data.email):
             raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail="Email already exists"
+                status_code=status.HTTP_409_CONFLICT, detail="Email already exists"
             )
 
         if self.repository.get_by_username(user_data.username):
             raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail="Username already exists"
+                status_code=status.HTTP_409_CONFLICT, detail="Username already exists"
             )
 
         return self.repository.create(user_data)
@@ -42,16 +39,14 @@ class UserService:
 
         if not user:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )
 
         if user_data.email and user_data.email != user.email:
             existing_email = self.repository.get_by_email(user_data.email)
             if existing_email:
                 raise HTTPException(
-                    status_code=status.HTTP_409_CONFLICT,
-                    detail="Email already exists"
+                    status_code=status.HTTP_409_CONFLICT, detail="Email already exists"
                 )
 
         if user_data.username and user_data.username != user.username:
@@ -59,7 +54,7 @@ class UserService:
             if existing_username:
                 raise HTTPException(
                     status_code=status.HTTP_409_CONFLICT,
-                    detail="Username already exists"
+                    detail="Username already exists",
                 )
 
         return self.repository.update(user, user_data)
@@ -69,8 +64,7 @@ class UserService:
 
         if not user:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="User not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
             )
 
         self.repository.delete(user)
