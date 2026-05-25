@@ -11,7 +11,7 @@ def test_create_user_success():
         "email": "userTestDev@example.com",
         "first_name": "Test",
         "last_name": "Dev",
-        "role": "user"
+        "role": "user",
     }
 
     response = client.post("/users", json=payload)
@@ -37,7 +37,7 @@ def test_create_user_duplicate_email():
         "email": "userTestQA@example.com",
         "first_name": "Test",
         "last_name": "QA",
-        "role": "user"
+        "role": "user",
     }
 
     first_response = client.post("/users", json=payload)
@@ -49,7 +49,7 @@ def test_create_user_duplicate_email():
         "email": "userTestQA@example.com",
         "first_name": "Test",
         "last_name": "QA",
-        "role": "admin"
+        "role": "admin",
     }
 
     response = client.post("/users", json=duplicate_payload)
@@ -78,7 +78,7 @@ def test_update_user_success():
         "email": "userTestUpdate@example.com",
         "first_name": "Before",
         "last_name": "Update",
-        "role": "user"
+        "role": "user",
     }
 
     create_response = client.post("/users", json=create_payload)
@@ -86,15 +86,9 @@ def test_update_user_success():
 
     user = create_response.json()
 
-    update_payload = {
-        "first_name": "After",
-        "role": "admin"
-    }
+    update_payload = {"first_name": "After", "role": "admin"}
 
-    response = client.patch(
-        f"/users/{user['id']}",
-        json=update_payload
-    )
+    response = client.patch(f"/users/{user['id']}", json=update_payload)
 
     assert response.status_code == 200
 
@@ -110,7 +104,7 @@ def test_delete_user_success():
         "email": "userTestDelete@example.com",
         "first_name": "Delete",
         "last_name": "User",
-        "role": "guest"
+        "role": "guest",
     }
 
     create_response = client.post("/users", json=create_payload)
