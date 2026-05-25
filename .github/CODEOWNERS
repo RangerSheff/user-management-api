@@ -28,7 +28,7 @@
 
 # Infrastructure
 Dockerfile @RangerSheff
-docker-compose.yml @RangerSheff
+docker-compose.yaml @RangerSheff
 cloudbuild.yaml @RangerSheff
 
 # Dependency management

@@ -21,3 +21,4 @@ httpx
 ruff
 bandit
 pip-audit
+pre-commit

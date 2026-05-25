@@ -1,6 +1,22 @@
-venv
-__pycache__
-.pytest_cache
+# Virtual environments
+venv/
+
+# Python cache
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+
+# Coverage
 .coverage
+htmlcov/
+
+# Environment files
 .env
+.env.*
+
+# Git
 .git
+.gitignore
+
+# Tooling
+.pre-commit-config.yaml

@@ -2,8 +2,7 @@ import logging
 import sys
 
 LOG_FORMAT = (
-    "%(asctime)s | %(levelname)s | %(name)s | "
-    "%(filename)s:%(lineno)d | %(message)s"
+    "%(asctime)s | %(levelname)s | %(name)s | %(filename)s:%(lineno)d | %(message)s"
 )
 
 
@@ -11,9 +10,7 @@ def configure_logging() -> None:
     logging.basicConfig(
         level=logging.INFO,
         format=LOG_FORMAT,
-        handlers=[
-            logging.StreamHandler(sys.stdout)
-        ],
+        handlers=[logging.StreamHandler(sys.stdout)],
     )
 
 
