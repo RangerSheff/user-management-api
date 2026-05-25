@@ -16,7 +16,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title="User Management API",
     description="FastAPI challenge for Stefanini",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 app.middleware("http")(request_logging_middleware)
@@ -27,6 +27,4 @@ app.include_router(user_router)
 @app.get("/health")
 def health_check():
     logger.info("Health check executed")
-    return {
-        "status": "OK"
-    }
+    return {"status": "OK"}

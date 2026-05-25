@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     POSTGRES_HOST: str = "localhost"
     POSTGRES_PORT: int = 5432
     POSTGRES_DB: str
+    POSTGRES_SSLMODE: str = "disable"
 
     class Config:
         env_file = ".env"
@@ -23,6 +24,7 @@ class Settings(BaseSettings):
             f"{self.POSTGRES_HOST}:"
             f"{self.POSTGRES_PORT}/"
             f"{self.POSTGRES_DB}"
+            f"?sslmode={self.POSTGRES_SSLMODE}"
         )
 
 
