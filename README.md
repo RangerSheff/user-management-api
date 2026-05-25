@@ -1,12 +1,12 @@
 # User Management API
 
-![CI](https://github.com/RangerSheff/user-management-api/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/RangerSheff/user-management-api/actions/workflows/ci.yaml/badge.svg)
 ![Python](https://img.shields.io/badge/python-3.13-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-REST_API-green)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
 ![Docker](https://img.shields.io/badge/Docker-Containerization-2496ED)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 API REST orientada a empresas, desarrollada con FastAPI, PostgreSQL, Docker y prácticas DevSecOps.
 
@@ -474,7 +474,7 @@ El pipeline automatiza:
 * Instalación de dependencias
 * Ejecución de tests automatizados
 * Construcción de imagen Docker
-* Push de imagen a Google Container Registry
+* Push de imagen a Google Artifact Registry
 * Despliegue automatizado a Cloud Run
 
 ### Variables reemplazables
@@ -587,7 +587,7 @@ Ejemplo estructura solicitada para entrega final:
   "name": "Carlos Javier López Aguayo",
   "mail": "carloslopezaguayo@gmail.com",
   "github_url": "https://github.com/RangerSheff/user-management-api",
-  "api_url": "https://user-management-api-xxxxx-us-central1.a.run.app"
+  "api_url": "https://user-management-api-904851178805.us-central1.run.app"
 }
 ```
 
