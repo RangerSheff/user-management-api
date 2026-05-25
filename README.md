@@ -1,6 +1,7 @@
 # User Management API
 
 ![CI](https://github.com/RangerSheff/user-management-api/actions/workflows/ci.yaml/badge.svg)
+![Deploy](https://img.shields.io/badge/deploy-cloud_run-success)
 ![Python](https://img.shields.io/badge/python-3.13-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-REST_API-green)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
@@ -8,7 +9,19 @@
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-API REST orientada a empresas, desarrollada con FastAPI, PostgreSQL, Docker y prácticas DevSecOps.
+API RESTful para administración de usuarios construida con **FastAPI**, **SQLAlchemy**, **PostgreSQL**, **Docker**, **pytest** y **Google Cloud Run**.
+
+Este proyecto fue desarrollado como challenge técnico orientado a backend engineering, arquitectura limpia, testing, containerización, CI/CD y despliegue cloud.
+
+# API desplegada
+
+Despliegue productivo en Google Cloud Run:
+
+- API URL: `https://user-management-api-904851178805.us-central1.run.app`
+- Swagger UI: `https://user-management-api-904851178805.us-central1.run.app/docs`
+- OpenAPI JSON: `https://user-management-api-904851178805.us-central1.run.app/openapi.json`
+
+---
 
 ## Descripción General
 
@@ -16,7 +29,7 @@ User Management API es un servicio backend RESTful desarrollado con FastAPI y Po
 
 Este proyecto fue desarrollado como parte de un desafío técnico para una posición Full Stack Senior y demuestra:
 
-* Desarrollo de APIs REST
+* Desarrollo de APIs REST con FastAPI
 * Operaciones CRUD completas
 * Arquitectura en capas
 * Repository Pattern y Service Layer
@@ -70,6 +83,18 @@ scripts/            # Automatización local
 ```
 
 ---
+
+## Estado del Proyecto
+
+| Estado | Valor |
+|---|---|
+| Python | 3.13 |
+| Framework | FastAPI |
+| Base de datos | PostgreSQL |
+| Cloud | Google Cloud Run |
+| Coverage | 100% |
+| CI/CD | GitHub Actions + Cloud Build |
+| Licencia | MIT |
 
 ## Stack Tecnológico
 
@@ -161,12 +186,12 @@ scripts/            # Automatización local
 
 ## Ejemplos de Consumo API
 
-> Base URL local: `http://127.0.0.1:8000`
+> Base URL local: `https://user-management-api-904851178805.us-central1.run.app`
 
 ### Health Check
 
 ```bash
-curl -X GET http://127.0.0.1:8000/health
+curl -X GET https://user-management-api-904851178805.us-central1.run.app/health
 ```
 
 Respuesta esperada:
@@ -182,7 +207,7 @@ Respuesta esperada:
 ### Crear Usuario
 
 ```bash
-curl -X POST http://127.0.0.1:8000/users \
+curl -X POST https://user-management-api-904851178805.us-central1.run.app/users \
   -H "Content-Type: application/json" \
   -d '{
     "username": "userTestDev",
@@ -214,7 +239,7 @@ Respuesta esperada:
 ### Obtener Usuarios
 
 ```bash
-curl -X GET http://127.0.0.1:8000/users
+curl -X GET https://user-management-api-904851178805.us-central1.run.app/users
 ```
 
 Respuesta esperada:
@@ -240,13 +265,13 @@ Respuesta esperada:
 ### Obtener Usuario por ID
 
 ```bash
-curl -X GET http://127.0.0.1:8000/users/{user_id}
+curl -X GET https://user-management-api-904851178805.us-central1.run.app/users/{user_id}
 ```
 
 Ejemplo:
 
 ```bash
-curl -X GET http://127.0.0.1:8000/users/00000000-0000-0000-0000-000000000000
+curl -X GET https://user-management-api-904851178805.us-central1.run.app/users/00000000-0000-0000-0000-000000000000
 ```
 
 ---
@@ -254,7 +279,7 @@ curl -X GET http://127.0.0.1:8000/users/00000000-0000-0000-0000-000000000000
 ### Actualizar Usuario
 
 ```bash
-curl -X PATCH http://127.0.0.1:8000/users/{user_id} \
+curl -X PATCH https://user-management-api-904851178805.us-central1.run.app/users/{user_id} \
   -H "Content-Type: application/json" \
   -d '{
     "first_name": "Updated",
@@ -267,7 +292,7 @@ curl -X PATCH http://127.0.0.1:8000/users/{user_id} \
 ### Eliminar Usuario
 
 ```bash
-curl -X DELETE http://127.0.0.1:8000/users/{user_id}
+curl -X DELETE https://user-management-api-904851178805.us-central1.run.app/users/{user_id}
 ```
 
 Respuesta esperada:
@@ -336,7 +361,16 @@ POSTGRES_PASSWORD=your_secure_password
 POSTGRES_HOST=localhost
 POSTGRES_PORT=5432
 POSTGRES_DB=user_management_db
+POSTGRES_SSLMODE=disable
 ```
+
+Para Neon PostgreSQL:
+
+```env
+POSTGRES_SSLMODE=require
+```
+
+---
 
 > No se deben versionar credenciales reales. El archivo `.env` debe permanecer fuera del repositorio.
 
@@ -359,7 +393,7 @@ uvicorn app.main:app --reload
 ### Documentación Swagger
 
 ```text
-http://127.0.0.1:8000/docs
+https://user-management-api-904851178805.us-central1.run.app/docs
 ```
 
 ---
